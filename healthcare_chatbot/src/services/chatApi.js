@@ -6,7 +6,7 @@ export function analyzeSymptoms(symptom, duration) {
     symptom.includes('chest pain') ||
     symptom.includes('breathing') ||
     duration >= 5
-  ) severity = 'emergency'
+  ) severity = 'severe'
 
   let advice
   if (severity === 'mild') {

@@ -2,175 +2,163 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   setMode,
-  setDateTime,
-  setContact,
+  setDate,
+  setTime,
+  setPhone,
+  setEmail,
 } from '../../features/chat/appointmentSlice'
-import { bookingCompleted } from '../../features/chat/chatSlice'
+import {
+  askDate,
+  askTime,
+  askPhone,
+  askEmail,
+  bookingCompleted,
+  addUserMessage,
+} from '../../features/chat/chatSlice'
 
-// Recommended availability (frontend-driven)
+// Available options
 const availableDates = ['2026-02-19', '2026-02-20', '2026-02-21']
 const availableTimes = ['10:00 AM', '11:30 AM', '02:00 PM', '04:30 PM']
+
+// Validation
+const isValidPhone = phone => /^\d{10}$/.test(phone)
+const isValidEmail = email =>
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+/* ✅ Shared alignment with bot messages */
+const botAlignClass = 'ml-12 mt-1 max-w-[75%]'
 
 export default function AppointmentBooking() {
   const dispatch = useDispatch()
   const booking = useSelector(state => state.appointment)
+  const [input, setInput] = useState('')
 
-  const [date, setDate] = useState('')
-  const [time, setTime] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
-
-  /* ---------- STEP 1: MODE SELECTION ---------- */
+  /* ---------- STEP 1: MODE ---------- */
   if (booking.step === 1) {
     return (
-      <div className="max-w-md bg-white border border-gray-200 rounded-xl p-4 shadow-md">
-        <p className="font-semibold text-gray-900 mb-1">
-          Book Appointment
-        </p>
-        <p className="text-sm text-gray-700 mb-3">
-          👨‍⚕️ Dr. Anil Sharma (General Physician)<br />
-          📍 Apollo Clinic, Main Road<br />
-          💰 ₹500 Consultation Fee
-        </p>
+      <div className={`${botAlignClass} flex gap-3`}>
+        <button
+          onClick={() => {
+            dispatch(addUserMessage('Online'))
+            dispatch(setMode('online'))
+            dispatch(askDate())
+          }}
+          className="px-4 py-2 bg-green-600 text-white rounded-lg"
+        >
+          Online
+        </button>
 
-        <div className="flex gap-3">
-          <button
-            onClick={() => dispatch(setMode('offline'))}
-            className="flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-          >
-            Offline Visit
-          </button>
-          <button
-            onClick={() => dispatch(setMode('online'))}
-            className="flex-1 px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
-          >
-            Online Consultation
-          </button>
-        </div>
+        <button
+          onClick={() => {
+            dispatch(addUserMessage('Offline'))
+            dispatch(setMode('offline'))
+            dispatch(askDate())
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          Offline
+        </button>
       </div>
     )
   }
 
-  /* ---------- STEP 2: DATE & TIME ---------- */
+  /* ---------- STEP 2: DATE ---------- */
   if (booking.step === 2) {
     return (
-      <div className="max-w-md bg-white border rounded-xl p-4 shadow-sm space-y-4">
-        <p className="font-semibold text-gray-900">
-          Select Appointment Slot
-        </p>
-
-        {/* Date Selection */}
-        <div>
-          <p className="text-sm text-gray-600 mb-2">
-            Recommended Available Dates
-          </p>
-          <div className="flex gap-2 flex-wrap">
-            {availableDates.map(d => (
-              <button
-                key={d}
-                onClick={() => setDate(d)}
-                className={`px-3 py-1.5 rounded-lg border text-sm transition
-                  ${
-                    date === d
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white text-gray-700 hover:bg-blue-50'
-                  }`}
-              >
-                {d}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Time Selection */}
-        <div>
-          <p className="text-sm text-gray-600 mb-2">
-            Available Time Slots
-          </p>
-          <div className="flex gap-2 flex-wrap">
-            {availableTimes.map(t => (
-              <button
-                key={t}
-                onClick={() => setTime(t)}
-                className={`px-3 py-1.5 rounded-lg border text-sm transition
-                  ${
-                    time === t
-                      ? 'bg-green-600 text-white border-green-600'
-                      : 'bg-white text-gray-700 hover:bg-green-50'
-                  }`}
-              >
-                {t}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <button
-          disabled={!date || !time}
-          onClick={() => dispatch(setDateTime({ date, time }))}
-          className={`w-full mt-2 px-4 py-2 rounded-lg font-medium transition
-            ${
-              date && time
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-        >
-          Continue
-        </button>
+      <div className={`${botAlignClass} flex gap-2 flex-wrap`}>
+        {availableDates.map(d => (
+          <button
+            key={d}
+            onClick={() => {
+              dispatch(addUserMessage(d))
+              dispatch(setDate(d))
+              dispatch(askTime())
+            }}
+            className="px-3 py-1.5 border rounded-lg bg-white hover:bg-blue-50"
+          >
+            {d}
+          </button>
+        ))}
       </div>
     )
   }
 
-  /* ---------- STEP 3: CONTACT & CONFIRM ---------- */
+  /* ---------- STEP 3: TIME ---------- */
   if (booking.step === 3) {
     return (
-      <div className="max-w-md bg-white border rounded-xl p-4 shadow-sm space-y-3">
-        <p className="font-semibold text-gray-900">
-          Confirm Appointment
-        </p>
+      <div className={`${botAlignClass} flex gap-2 flex-wrap`}>
+        {availableTimes.map(t => (
+          <button
+            key={t}
+            onClick={() => {
+              dispatch(addUserMessage(t))
+              dispatch(setTime(t))
+              dispatch(askPhone())
+            }}
+            className="px-3 py-1.5 border rounded-lg bg-white hover:bg-green-50"
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    )
+  }
 
-        {/* Summary */}
-        <div className="bg-gray-50 p-3 rounded-lg text-sm text-gray-700">
-          <p><b>Doctor:</b> Dr. Anil Sharma</p>
-          <p><b>Date:</b> {date}</p>
-          <p><b>Time:</b> {time}</p>
-          <p><b>Mode:</b> {booking.mode === 'online' ? 'Online' : 'Offline'}</p>
-        </div>
-
+  /* ---------- STEP 4: PHONE ---------- */
+  if (booking.step === 4) {
+    return (
+      <div className={botAlignClass}>
         <input
-          placeholder="Phone Number"
-          value={phone}
-          onChange={e => setPhone(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <input
-          placeholder="Email Address"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <button
-          disabled={!phone || !email}
-          onClick={() => {
-            dispatch(setContact({ phone, email }))
-            dispatch(
-              bookingCompleted({
-                date,
-                time,
-                mode: booking.mode,
-                })
-            )
+          value={input}
+          placeholder="Enter phone number"
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              if (!isValidPhone(input)) {
+                alert('Enter valid 10-digit phone number')
+                return
+              }
+              dispatch(addUserMessage(input))
+              dispatch(setPhone(input))
+              setInput('')
+              dispatch(askEmail())
+            }
           }}
-          className={`w-full mt-2 px-4 py-2 rounded-lg font-medium transition
-            ${
-              phone && email
-                ? 'bg-green-600 text-white hover:bg-green-700'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }`}
-        >
-          Confirm Appointment
-        </button>
+          className="w-full px-3 py-2 border rounded-lg"
+        />
+      </div>
+    )
+  }
+
+  /* ---------- STEP 5: EMAIL ---------- */
+  if (booking.step === 5) {
+    return (
+      <div className={botAlignClass}>
+        <input
+          value={input}
+          placeholder="Enter email address"
+          onChange={e => setInput(e.target.value)}
+          onKeyDown={e => {
+            if (e.key === 'Enter') {
+              if (!isValidEmail(input)) {
+                alert('Enter valid email address')
+                return
+              }
+
+              dispatch(addUserMessage(input))
+              dispatch(setEmail(input))
+
+              dispatch(
+                bookingCompleted({
+                  date: booking.date,
+                  time: booking.time,
+                  mode: booking.mode,
+                })
+              )
+            }
+          }}
+          className="w-full px-3 py-2 border rounded-lg"
+        />
       </div>
     )
   }

@@ -63,6 +63,42 @@ const chatSlice = createSlice({
         })
     },
 
+    askMode(state) {
+      state.messages.push({
+        role: 'bot',
+        text: 'Would you like an online or offline consultation?',
+      })
+    },
+
+    askDate(state) {
+      state.messages.push({
+        role: 'bot',
+        text: 'Please select an appointment date.',
+      })
+    },
+
+    askTime(state) {
+      state.messages.push({
+        role: 'bot',
+        text: 'Please select a time slot.',
+      })
+    },
+
+    askPhone(state) {
+      state.messages.push({
+        role: 'bot',
+        text: 'Please enter your phone number.',
+      })
+    },
+
+    askEmail(state) {
+      state.messages.push({
+        role: 'bot',
+        text: 'Please enter your email address.',
+      })
+    },
+
+
     handleYes(state) {
         state.messages.push({
             role: 'bot',
@@ -144,6 +180,11 @@ export const {
   addUserMessage,
   addBotMessage,
   setSymptom,
+  askMode,
+  askDate,
+  askTime,
+  askPhone,
+  askEmail,
   handleYes,
   handleNo,
   bookingCompleted,

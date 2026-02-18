@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  step: 0,          // 0 = idle
-  mode: null,       // online | offline
+  step: 0, // 0 idle | 1 mode | 2 date | 3 time | 4 phone | 5 email | 6 done
+  mode: null,
   date: '',
   time: '',
   phone: '',
@@ -12,16 +12,9 @@ const initialState = {
 const appointmentSlice = createSlice({
   name: 'appointment',
   initialState,
-
   reducers: {
     startBooking(state) {
-      // 🔒 FORCE RESET EVERY TIME
-      state.step = 1
-      state.mode = null
-      state.date = ''
-      state.time = ''
-      state.phone = ''
-      state.email = ''
+      return { ...initialState, step: 1 }
     },
 
     setMode(state, action) {
@@ -29,16 +22,24 @@ const appointmentSlice = createSlice({
       state.step = 2
     },
 
-    setDateTime(state, action) {
-      state.date = action.payload.date
-      state.time = action.payload.time
+    setDate(state, action) {
+      state.date = action.payload
       state.step = 3
     },
 
-    setContact(state, action) {
-      state.phone = action.payload.phone
-      state.email = action.payload.email
-      state.step = 4 // confirmed
+    setTime(state, action) {
+      state.time = action.payload
+      state.step = 4
+    },
+
+    setPhone(state, action) {
+      state.phone = action.payload
+      state.step = 5
+    },
+
+    setEmail(state, action) {
+      state.email = action.payload
+      state.step = 6
     },
 
     resetBooking() {
@@ -50,8 +51,10 @@ const appointmentSlice = createSlice({
 export const {
   startBooking,
   setMode,
-  setDateTime,
-  setContact,
+  setDate,
+  setTime,
+  setPhone,
+  setEmail,
   resetBooking,
 } = appointmentSlice.actions
 

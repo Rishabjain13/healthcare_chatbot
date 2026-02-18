@@ -18,7 +18,7 @@ export default function ChatWindow() {
       {stage === 'RECOMMEND_BOOKING' && bookingStep === 0 && (
         <button
           onClick={() => dispatch(startBooking())}
-          className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm transition"
+          className="ml-12 mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm transition"
         >
           📅 Book Appointment
         </button>
