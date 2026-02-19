@@ -12,12 +12,12 @@ export default function Header() {
 
   return (
       <div className="flex items-center justify-between px-4 sm:px-6 py-4 bg-white border-b">
-        <div className="flex items-center gap-3">
+        <div className="flex items-start gap-3">
           <div className="h-10 w-10 rounded-full bg-blue-100 text-white flex items-center justify-center">
             🤖
           </div>
         <div>
-          <h1 className="text-sm font-semibold text-gray-900">
+          <h1 className="text-lg font-semibold text-primary">
             Healthcare AI Assistant
           </h1>
           <p className="text-xs text-gray-500">

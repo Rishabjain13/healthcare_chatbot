@@ -127,7 +127,8 @@ export default function InputBar() {
               ? 'Type yes or no, or ask something else...'
               : 'Describe your symptoms...'
           }
-          className="flex-1 px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="flex-1 px-4 py-2 rounded-full border focus:outline-none focus:ring-2 focus:ring-primary"
+
         />
 
         <button
