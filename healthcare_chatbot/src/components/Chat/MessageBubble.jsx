@@ -18,14 +18,14 @@ export default function MessageBubble({ role, text }) {
           ${
             isUser
               ? 'bg-blue-600 text-white rounded-br-sm'
-              : 'bg-white dark:bg-slate-800  border border-gray-200  rounded-bl-sm'
+              : 'bg-white  border border-gray-200  rounded-bl-sm'
           }`}
       >
         {text}
       </div>
 
       {isUser && (
-        <div className="h-9 w-9 rounded-full bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 flex items-center justify-center shadow-sm">
+        <div className="h-9 w-9 rounded-full bg-gray-100 text-gray-700 flex items-center justify-center shadow-sm">
           👤
         </div>
       )}
