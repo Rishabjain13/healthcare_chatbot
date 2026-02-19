@@ -28,7 +28,7 @@ export default function Header() {
 
       <button
         onClick={restart}
-        className="px-4 py-2 text-sm rounded-lg bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 transition"
+        className="px-5 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white border transition"
         
       >
         🔄 New Chat

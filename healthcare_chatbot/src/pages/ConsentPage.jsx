@@ -1,8 +1,8 @@
-import { useContext } from 'react'
-import { ConsentContext } from '../context/ConsentContext'
+import { useContext } from "react";
+import { ConsentContext } from "../context/ConsentContext";
 
 export default function ConsentPage() {
-  const { acceptConsent } = useContext(ConsentContext)
+  const { acceptConsent } = useContext(ConsentContext);
 
   return (
     <div className="h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100">
@@ -24,5 +24,5 @@ export default function ConsentPage() {
         </button>
       </div>
     </div>
-  )
+  );
 }

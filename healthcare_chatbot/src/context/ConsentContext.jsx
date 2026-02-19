@@ -1,20 +1,19 @@
-import { createContext, useState } from 'react'
+import { createContext, useContext, useState } from "react";
 
-export const ConsentContext = createContext()
+export const ConsentContext = createContext();
 
 export function ConsentProvider({ children }) {
-  const [accepted, setAccepted] = useState(
-    localStorage.getItem('medical_consent') === 'true'
-  )
+  const [accepted, setAccepted] = useState(false);
 
-  const acceptConsent = () => {
-    localStorage.setItem('medical_consent', 'true')
-    setAccepted(true)
-  }
+  const acceptConsent = () => setAccepted(true);
 
   return (
     <ConsentContext.Provider value={{ accepted, acceptConsent }}>
       {children}
     </ConsentContext.Provider>
-  )
+  );
+}
+
+export function useConsent() {
+  return useContext(ConsentContext);
 }
