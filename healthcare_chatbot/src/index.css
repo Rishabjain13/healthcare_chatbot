@@ -1,17 +1,2 @@
 @import "tailwindcss";
 
-body {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
-  background-color: #f3f6fb;
-  color: #1f2937;
-}
-
-/* Scrollbar polish */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-thumb {
-  background: #c7d2fe;
-  border-radius: 6px;
-}
-

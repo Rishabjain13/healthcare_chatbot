@@ -16,6 +16,7 @@ const chatSlice = createSlice({
     currentSymptom: '',
     duration: null,
     severity: null,
+    isTyping: false, 
     messages: [
       { role: 'bot', text: '👋 Welcome to Healthcare AI Assistant.' },
       { role: 'bot', text: 'Please tell me what symptoms you are experiencing.' },
@@ -143,14 +144,14 @@ const chatSlice = createSlice({
 
 
   extraReducers: (builder) => {
-    builder.addCase(sendChatMessage.fulfilled, (state, action) => {
+    builder
+    .addCase(sendChatMessage.pending, (state) => {
+      state.isTyping = true // ✅ START TYPING
+    })
+    .addCase(sendChatMessage.fulfilled, (state, action) => {
       const { severity, advice } = action.payload
       state.severity = severity
-
-    //   state.messages.push({
-    //     role: 'bot',
-    //     text: `You mentioned symptoms for ${state.duration} day(s).`,
-    //   })
+      state.isTyping = false
 
       state.messages.push({ role: 'bot', text: advice })
 
@@ -171,6 +172,9 @@ const chatSlice = createSlice({
         })
         state.stage = 'RECOMMEND_BOOKING'
       }
+    })
+    .addCase(sendChatMessage.rejected, (state) => {
+      state.isTyping = false // ✅ SAFETY
     })
   },
 })
